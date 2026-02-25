@@ -1,6 +1,6 @@
 # TypeTrack – Typing Performance Analytics
 
-🚀 Live Demo: https://typetrack-srinath.netlify.app
+🚀 Live Demo: https://typetrack-app.netlify.app
 
 ## Features
 - Real-time WPM calculation
