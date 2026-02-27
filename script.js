@@ -51,16 +51,14 @@ function displayText() {
 
 // Start the typing test
 function startTest() {
-   loadNewText();
-   
    isActive = true;
-   startTime = Date.now();
+   // startTime = Date.now();
    typingInput.disabled = false;
    typingInput.placeholder = "Start typing...";
    typingInput.focus();
    startBtn.style.display = 'none';
    progressText.textContent = 'Test in progress...';
-   startTimer();
+   // startTimer();
 }
 
 // Start the countdown timer
@@ -78,6 +76,11 @@ function startTimer() {
 // Handle typing input
 function handleInput(e) {
    if (!isActive) return;
+
+   if (!startTime) {
+       startTime = Date.now();
+       startTimer();
+   }
    
    const inputValue = e.target.value;
    currentIndex = inputValue.length;
@@ -116,12 +119,29 @@ function updateDisplay(inputValue) {
 }
 
 // Update typing statistics
-function updateStats() {
-   const timeElapsed = (Date.now() - startTime) / 1000 / 60;
-   const grossWPM = (currentIndex / 5) / timeElapsed;
-   const netWPM = Math.max(0, Math.round(grossWPM - (errors / timeElapsed)));
-   const accuracy = totalChars > 0 ? Math.round(((totalChars - errors) / totalChars) * 100) : 100;
+// function updateStats() {
+//    const timeElapsed = (Date.now() - startTime) / 1000 / 60;
+//    const grossWPM = (currentIndex / 5) / timeElapsed;
+//    const netWPM = Math.max(0, Math.round(grossWPM - (errors / timeElapsed)));
+//    const accuracy = totalChars > 0 ? Math.round(((totalChars - errors) / totalChars) * 100) : 100;
    
+//    wpmElement.textContent = isFinite(netWPM) ? netWPM : 0;
+//    accuracyElement.textContent = accuracy;
+//    charactersElement.textContent = totalChars;
+// }
+function updateStats() {
+   const timeElapsedSeconds = (Date.now() - startTime) / 1000;
+
+   if (timeElapsedSeconds <= 0) return;
+
+   const minutes = timeElapsedSeconds / 60;
+   const grossWPM = (currentIndex / 5) / minutes;
+   const netWPM = Math.max(0, Math.round(grossWPM - (errors / minutes)));
+
+   const accuracy = totalChars > 0
+       ? Math.round(((totalChars - errors) / totalChars) * 100)
+       : 100;
+
    wpmElement.textContent = isFinite(netWPM) ? netWPM : 0;
    accuracyElement.textContent = accuracy;
    charactersElement.textContent = totalChars;
@@ -129,7 +149,9 @@ function updateStats() {
 
 // Update progress bar
 function updateProgress() {
-   const progress = (currentIndex / currentText.length) * 100;
+   // const progress = (currentIndex / currentText.length) * 100;
+   const correctChars = totalChars - errors;
+   const progress = (correctChars / currentText.length) * 100;
    progressFill.style.width = `${Math.min(progress, 100)}%`;
    
    if (progress >= 100) {
@@ -208,4 +230,37 @@ tryAgainBtn.addEventListener('click', closeResults);
 // Initialize the app when page loads
 document.addEventListener('DOMContentLoaded', () => {
    loadNewText();
+});
+
+
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+
+function setTheme(mode) {
+    if (mode === 'light') {
+        document.body.classList.add('light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    } else {
+        document.body.classList.remove('light');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    }
+
+    localStorage.setItem('theme', mode);
+}
+// Toggle click
+themeToggle.addEventListener('click', () => {
+    const isLight = document.body.classList.contains('light');
+    setTheme(isLight ? 'dark' : 'light');
+});
+
+// Load saved theme
+document.addEventListener('DOMContentLoaded', () => {
+    loadNewText();
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
 });

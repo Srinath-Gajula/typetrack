@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeTrack</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>TypeTrack | Typing Speed & Accuracy Test</title>
     <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+    <script src="https://kit.fontawesome.com/8278da896d.js" crossorigin="anonymous"></script>
+    
 </head>
 <body>
     <div class="timer" id="timer">
-        <i class="fas fa-clock"></i>
+        <!-- I'm going to call a clock icon from font awesome -->
+        <i class="fas fa-clock"></i>  
         <span>60</span>
     </div>
 
+    
     <div class="container">
         <div class="header">
-            <h1 class="title">TypeTest</h1>
-            <p class="subtitle">Measure your typing speed and accuracy</p>
+            <h1 class="title">TypeTrack</h1>
+            <p class="subtitle">Improve your typing speed and precision.</p>
+
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
         </div>
 
         <div class="stats-grid">
@@ -37,13 +45,16 @@
             </div>
         </div>
 
+
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="progress-text" id="progressText">Ready to start</div>
+
+            <div class="progress-text" id="progressText">Start typing to begin</div>
         </div>
 
+         
         <div class="text-container">
             <div class="text-content" id="textContent"></div>
         </div>
@@ -53,7 +64,7 @@
                 type="text" 
                 class="typing-input" 
                 id="typingInput" 
-                placeholder="Click start to begin typing..." 
+                placeholder='Press "Start Test" to begin...'
                 disabled
                 autocomplete="off"
                 spellcheck="false"
@@ -71,6 +82,7 @@
             </button>
         </div>
     </div>
+ 
 
     <div class="results-modal" id="resultsModal">
         <div class="results-content">
@@ -89,12 +101,12 @@
                     <div class="results-stat-label">Characters</div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="closeResults()">
+            <button class="btn btn-primary" id="tryAgainBtn" onclick="closeResults()">
                 <i class="fas fa-redo"></i>
                 Try Again
             </button>
         </div>
-    </div>
+    </div> 
 
     <script src="./script.js"></script>
 </body>
