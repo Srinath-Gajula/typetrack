@@ -5,8 +5,9 @@
 ## Features
 - Real-time WPM calculation
 - Accuracy tracking
-- Dynamic API-based text
-- Progress tracking
+- Sound effects
+- Dark/Light theme
+- API-based dynamic text
 - Results modal
 
 Built with HTML, CSS, and JavaScript.

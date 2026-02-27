@@ -8,6 +8,67 @@ const texts = [
    "Simplicity is the ultimate sophistication. It takes a lot of hard work to make something simple, to truly understand the underlying challenges and come up with elegant solutions.",
    "The future belongs to those who believe in the beauty of their dreams. Success is not final, failure is not fatal, it is the courage to continue that counts."
 ];
+// async function loadNewText() {
+//     try {
+//         progressText.textContent = "Loading text...";
+
+//         const response = await fetch(
+//             "https://dummyjson.com/quotes/random"
+//         );
+
+//         if (!response.ok) {
+//             throw new Error("API failed");
+//         }
+
+//         const data = await response.json();
+
+//         // Bacon Ipsum returns an array of paragraphs
+//         currentText = data.join(" ").slice(0, 250);
+
+//         displayText();
+//         progressText.textContent = "Start typing to begin";
+
+//     } catch (error) {
+//         console.error("Error fetching text:", error);
+
+//         currentText =
+//             "Typing practice improves speed and accuracy over time. Stay consistent and focused for better results.";
+
+//         displayText();
+//         progressText.textContent = "Could not load new text. Try again.";
+//     }
+// }
+
+// async function loadNewText() {
+//     try {
+//         progressText.textContent = "Loading text...";
+
+//         let response;
+
+//         try {
+//             response = await fetch("https://dummyjson.com/quotes/random");
+//             if (!response.ok) throw new Error();
+//             const data = await response.json();
+//             currentText = `${data.quote} — ${data.author}`;
+//         } catch {
+//             response = await fetch("https://baconipsum.com/api/?type=all-meat&paras=1");
+//             const data = await response.json();
+//             currentText = data.join(" ");
+//         }
+
+//         currentText = currentText.slice(0, 250);
+
+//         displayText();
+//         progressText.textContent = "Start typing to begin";
+
+//     } catch (error) {
+//         currentText =
+//             "Typing practice improves speed and accuracy over time.";
+//         displayText();
+//         progressText.textContent = "Offline mode activated.";
+//     }
+// }
+
 
 // Global variables
 let currentText = '';
@@ -18,6 +79,7 @@ let timer = null;
 let isActive = false;
 let errors = 0;
 let totalChars = 0;
+let soundEnabled = true;
 
 // DOM elements
 const textContent = document.getElementById('textContent');
@@ -33,11 +95,51 @@ const timerElement = document.getElementById('timer');
 const resultsModal = document.getElementById('resultsModal');
 const tryAgainBtn = document.getElementById('tryAgainBtn');
 
+
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+
+    if (!soundEnabled) return;   // this line controls everything
+
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    if (type === "typing") {
+        oscillator.type = "square";
+        oscillator.frequency.value = 500;
+        gainNode.gain.value = 0.03;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.03);
+    }
+
+    if (type === "error") {
+        oscillator.type = "sawtooth";
+        oscillator.frequency.value = 150;
+        gainNode.gain.value = 0.08;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.15);
+    }
+
+    if (type === "complete") {
+        oscillator.type = "sine";
+        oscillator.frequency.value = 800;
+        gainNode.gain.value = 0.1;
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.3);
+    }
+}
+
+
 // Load a random text for typing
 function loadNewText() {
    currentText = texts[Math.floor(Math.random() * texts.length)];
    displayText();
 }
+
 
 // Display text with spans for each character
 function displayText() {
@@ -51,6 +153,8 @@ function displayText() {
 
 // Start the typing test
 function startTest() {
+    audioContext.resume();  // unlock sound
+
    isActive = true;
    // startTime = Date.now();
    typingInput.disabled = false;
@@ -72,6 +176,20 @@ function startTimer() {
        }
    }, 1000);
 }
+// function startTimer() {
+//    timer = setInterval(() => {
+//        timeLeft--;
+//        timerElement.querySelector('span').textContent = timeLeft;
+
+//        if (timeLeft <= 10) {
+//            timerElement.style.color = 'red';
+//        }
+
+//        if (timeLeft <= 0) {
+//            endTest();
+//        }
+//    }, 1000);
+// }
 
 // Handle typing input
 function handleInput(e) {
@@ -84,6 +202,12 @@ function handleInput(e) {
    
    const inputValue = e.target.value;
    currentIndex = inputValue.length;
+
+   if (inputValue[currentIndex - 1] === currentText[currentIndex - 1]) {
+       playSound("typing");
+   } else {
+       playSound("error");
+   }
    
    updateDisplay(inputValue);
    updateStats();
@@ -163,6 +287,7 @@ function updateProgress() {
 
 // End the typing test
 function endTest() {
+    playSound("complete");
    isActive = false;
    typingInput.disabled = true;
    clearInterval(timer);
@@ -201,6 +326,7 @@ function resetTest() {
    typingInput.value = '';
    typingInput.disabled = true;
    typingInput.placeholder = "Click start to begin typing...";
+//    timerElement.style.color = '';
    startBtn.style.display = 'inline-flex';
    timerElement.querySelector('span').textContent = '60';
    progressText.textContent = 'Ready to start';
@@ -228,8 +354,23 @@ typingInput.addEventListener('paste', (e) => e.preventDefault());
 tryAgainBtn.addEventListener('click', closeResults);
 
 // Initialize the app when page loads
+// document.addEventListener('DOMContentLoaded', () => {
+//    loadNewText();
+// });
+
+// Load saved theme
 document.addEventListener('DOMContentLoaded', () => {
-   loadNewText();
+    loadNewText();
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+
+    const savedSound = localStorage.getItem('sound');
+if (savedSound !== null) {
+    setSound(savedSound === 'true');
+}
 });
 
 
@@ -255,12 +396,24 @@ themeToggle.addEventListener('click', () => {
     setTheme(isLight ? 'dark' : 'light');
 });
 
-// Load saved theme
-document.addEventListener('DOMContentLoaded', () => {
-    loadNewText();
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        setTheme(savedTheme);
+const soundToggle = document.getElementById('soundToggle');
+const soundIcon = document.getElementById('soundIcon');
+
+function setSound(enabled) {
+    soundEnabled = enabled;
+
+    if (enabled) {
+        soundIcon.classList.remove('fa-volume-mute');
+        soundIcon.classList.add('fa-volume-up');
+    } else {
+        soundIcon.classList.remove('fa-volume-up');
+        soundIcon.classList.add('fa-volume-mute');
     }
+
+    localStorage.setItem('sound', enabled);
+}
+
+soundToggle.addEventListener('click', () => {
+    setSound(!soundEnabled);
 });
