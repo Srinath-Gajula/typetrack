@@ -1,13 +1,30 @@
 # TypeTrack – Typing Performance Analytics
 
-🚀 Live Demo: https://typetrack-app.netlify.app
+A responsive typing test application that measures real-time typing speed, accuracy, and performance insights.
 
-## Features
-- Real-time WPM calculation
-- Accuracy tracking
-- Sound effects
-- Dark/Light theme
-- API-based dynamic text
-- Results modal
+🔗 Live Demo: https://typetrack-app.netlify.app
 
-Built with HTML, CSS, and JavaScript.
+---
+
+## ✨ Features
+- ⚡ Real-time WPM (Words Per Minute) calculation
+- 🎯 Live accuracy tracking
+- 🔊 Typing sound effects with toggle
+- 🌙 Dark / ☀️ Light theme with persistence (LocalStorage)
+- 📊 Dynamic progress bar
+- 🌐 API-based dynamic text loading
+- 🏁 Results modal with detailed final stats
+- ⌨️ Paste prevention for fair performance tracking
+
+---
+
+## 📌 Key Highlights
+
+- Character-by-character validation system  
+- Correct-character-based WPM calculation  
+- Keystroke-based accuracy tracking  
+- Clean, modular JavaScript architecture  
+
+---
+
+Built with a focus on clean architecture, performance optimization, and scalable UI design.

@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeTrack | Typing Speed & Accuracy Test</title>
     <link rel="stylesheet" href="style.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
-    <script src="https://kit.fontawesome.com/8278da896d.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- <script src="https://kit.fontawesome.com/8278da896d.js" crossorigin="anonymous"></script> loads icons from personal Font Awesome account-->
     
 </head>
 <body>
     <div class="timer" id="timer">
         <!-- I'm going to call a clock icon from font awesome -->
-        <i class="fas fa-clock"></i>  
+        <i class="fa-solid fa-clock"></i>
         <span>60</span>
     </div>
 
@@ -22,11 +23,11 @@
 
             <div class="header-controls">
                 <button class="icon-btn" id="soundToggle">
-                    <i class="fas fa-volume-up" id="soundIcon"></i>
+                    <i class="fa-solid fa-volume-up" id="soundIcon"></i>
                 </button>
 
                 <button class="icon-btn" id="themeToggle">
-                    <i class="fas fa-moon" id="themeIcon"></i>
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
                 </button>
             </div>
 
@@ -36,17 +37,17 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fas fa-tachometer-alt stat-icon"></i>
+                <i class="fa-solid fa-gauge-high stat-icon"></i>
                 <div class="stat-value" id="wpm">0</div>
                 <div class="stat-label">WPM</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-bullseye stat-icon"></i>
+                <i class="fa-solid fa-bullseye stat-icon"></i>
                 <div class="stat-value" id="accuracy">100</div>
                 <div class="stat-label">Accuracy</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-keyboard stat-icon"></i>
+                <i class="fa-solid fa-keyboard stat-icon"></i>
                 <div class="stat-value" id="characters">0</div>
                 <div class="stat-label">Characters</div>
             </div>
@@ -80,11 +81,11 @@
 
         <div class="controls">
             <button class="btn btn-primary" id="startBtn">
-                <i class="fas fa-play"></i>
+                <i class="fa-solid fa-play"></i>
                 Start Test
             </button>
             <button class="btn btn-secondary" id="resetBtn">
-                <i class="fas fa-redo"></i>
+                <i class="fa-solid fa-rotate-right"></i>
                 Reset
             </button>
         </div>
@@ -109,7 +110,7 @@
                 </div>
             </div>
             <button class="btn btn-primary" id="tryAgainBtn" onclick="closeResults()">
-                <i class="fas fa-redo"></i>
+                <i class="fa-solid fa-rotate-right"></i>
                 Try Again
             </button>
         </div>
